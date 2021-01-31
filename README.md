@@ -19,6 +19,9 @@ Golang 实现的 pxe 装机系统，类似于 Cobbler
 # 启动服务, 并指定绑定的网卡
 $ ./gopxe --device=eth0
 
+# 复制 pxe 菜单文件到 tftp 目录
+$ cp pxelinux/* /opt/GoPXE/tftp/
+
 # 添加系统
 $ curl -X POST -vv --form ks_param='{"rootpw": "666" }' --form version="CentOS7" --form name=CentOS7_minimal --form type=CentOS --form "iso=@/root/pxe/CentOS-7-x86_64-Minimal-2003.iso" \
 http://10.1.1.1:8888/create/
