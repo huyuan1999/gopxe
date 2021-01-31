@@ -16,6 +16,30 @@ Golang 实现的 pxe 装机系统，类似于 Cobbler
 
 ## 使用方式
 ```bash
+# 安装和配置 dhcp 服务(这步后续会取消, 所有服务都将由 gopxe 内置)
+$ yum -y install dhcpd
+$ cat > /etc/dhcp/dhcpd.conf << EOF
+option domain-name "test.com";
+option domain-name-servers 223.5.5.5,223.6.6.6;
+
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+ddns-update-style none;
+
+subnet 10.0.0.0 netmask 255.0.0.0 {
+        option routers                  10.0.0.1;
+        option subnet-mask              255.0.0.0;
+        option domain-search            "test.com";
+        option domain-name-servers      223.5.5.5,223.6.6.6;
+        option time-offset              -18000;     # Eastern Standard Time
+        filename                        "pxelinux.0";
+        range 10.1.0.1 10.1.0.10 ;  # reserved DHCPD range e.g. 10.17.224.100 10.17.224.150
+}
+EOF
+
+$ systemctl enable --now dhcpd
+
 # 启动服务, 并指定绑定的网卡
 $ ./gopxe --device=eth0
 
