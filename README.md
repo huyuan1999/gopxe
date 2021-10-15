@@ -6,12 +6,16 @@ Golang 实现的 pxe 装机系统，类似于 Cobbler
 - 支持 CentOS7 和 RedHat7 系统安装
 - 支持参数化模板文件
 
-
 ## 未来
 - 实现 DHCP
 - 实现装机状态管理
 - 实现 Web 管理
 - 支持更多类型的操作系统
+
+## 项目改造计划
+1. pxe server 下发（如果是第一次启动则启动bootos检查是否是物理机如果是则配置oob，bmc，raid并上报机器sn和网卡mac）
+2. pxe server 接受到bootos客户端上报的信息，生成装机任务并加载default模版，根据模版生成装机菜单。一切准备完毕之后通知bootos客户端
+3. bootos 客户端控制服务器重启，进入装机任务（default中必须添加inst.ks.sendmac和inst.ks.sendsn内核参数）
 
 
 ## 使用方式
